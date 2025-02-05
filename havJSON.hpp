@@ -15,13 +15,14 @@ TODO
 
 REVISION HISTORY
 
+v0.2 (2025-02-05) - Resolved issues in BSON data conversion logic.
 v0.1 (2024-01-12) - First release.
 
 LICENSE
 
 MIT License
 
-Copyright (c) 2024 René Nicolaus
+Copyright (c) 2024-2025 René Nicolaus
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -2576,11 +2577,20 @@ namespace havJSON
                         }
                     }
                 }
+                else
+                {
+                    jsonContent += ", ";
+                }
             }
 
             if (jsonStringStream[index] != 0x00)
             {
                 throw std::runtime_error("EOO not found!");
+            }
+
+            if (jsonContent.size() >= 2 && jsonContent.substr(jsonContent.size() - 2) == ", ")
+            {
+                jsonContent.erase(jsonContent.size() - 2);
             }
 
             jsonContent += "}";
@@ -4330,14 +4340,12 @@ namespace havJSON
                                 jsonContentsAsBinaryStream.push_back(0x01);
                                 break;
 
-                            case havJSONToken::LeftCurlyBracket:
-                                jsonContentsAsBinaryStream.push_back(0x00);
-                                break;
-
                             case havJSONToken::LeftSquareBracket:
                                 jsonContentsAsBinaryStream.push_back(0x04);
                                 break;
 
+                            case havJSONToken::String:
+                            case havJSONToken::LeftCurlyBracket:
                             case havJSONToken::RightCurlyBracket:
                             case havJSONToken::RightSquareBracket:
                                 // Ignore
