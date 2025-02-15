@@ -15,6 +15,7 @@ TODO
 
 REVISION HISTORY
 
+v0.3 (2025-02-15) - Resolved further issues in BSON data conversion logic.
 v0.2 (2025-02-05) - Resolved issues in BSON data conversion logic.
 v0.1 (2024-01-12) - First release.
 
@@ -4412,7 +4413,7 @@ namespace havJSON
                                     }
 
                                     // String
-                                    std::string stringValue = ConvertToEscapedString((*itr).mValue.value());
+                                    std::string stringValue = (*itr).mValue.value();
                                     for (std::string::size_type stringIndex = 0; stringIndex < stringValue.size(); ++stringIndex)
                                     {
                                         jsonContentsAsBinaryStream.push_back(stringValue[stringIndex]);
@@ -4558,7 +4559,7 @@ namespace havJSON
                             case havJSONToken::String:
                                 {
                                     // String
-                                    std::string stringValue = ConvertToEscapedString((*itr).mValue.value());
+                                    std::string stringValue = (*itr).mValue.value();
                                     for (std::string::size_type sindex = 0; sindex < stringValue.size(); ++sindex)
                                     {
                                         jsonContentsAsBinaryStream.push_back(stringValue[sindex]);
